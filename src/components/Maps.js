@@ -7,16 +7,15 @@ const initialState = {
   latitude: null,
   longitude: null,
   latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
+  longitudeDelta: 0.0421
 };
 
 const Maps = () => {
   const [currentPosition, setCurrentPosition] = useState(initialState);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // alert(JSON.stringify(position));
+    navigator.geolocation.watchPosition(
+      position => {
         const { latitude, longitude } = position.coords;
         setCurrentPosition({
           ...currentPosition,
@@ -24,8 +23,12 @@ const Maps = () => {
           longitude
         })
       },
-      (error) => alert(error.message),
-      { timeout: 20000, maximumAge: 1000 }
+      error => alert(error.message),
+      { 
+        timeout: 20000,
+        maximumAge: 1000,
+        distanceFilter: 10
+      }
     );
   }, []);
 
